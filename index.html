@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wedding Invitation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>You're Invited</h1>
+    <h2 id="names"></h2>
+    <p id="customMessage"></p>
+    <p><strong>Date:</strong> <span id="date"></span></p>
+    <p><strong>Venue:</strong> <span id="venue"></span></p>
+  </div>
+
+  <video autoplay muted loop id="bgVideo">
+    <source src="assets/invite-video.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+
+  <audio id="bgMusic" loop>
+    <source src="assets/music.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script src="event-details.js"></script>
+  <script>
+    document.getElementById("names").textContent = EVENT_DETAILS.brideName + " & " + EVENT_DETAILS.groomName;
+    document.getElementById("date").textContent = EVENT_DETAILS.eventDate;
+    document.getElementById("venue").textContent = EVENT_DETAILS.venue;
+    document.getElementById("customMessage").textContent = EVENT_DETAILS.customMessage;
+
+    const audio = document.getElementById("bgMusic");
+    document.body.addEventListener("click", () => {
+      if (EVENT_DETAILS.musicEnabled) {
+        audio.play();
+      }
+    });
+  </script>
+</body>
+</html>
