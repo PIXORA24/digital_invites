@@ -1,44 +1,186 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wedding Invitation</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Social media preview -->
+  <meta property="og:title" content="Prerna Singh & Sumit Gupta Marriage Ceremony" />
+  <meta property="og:description" content="Join us on July 28, 2025, at 08:00 AM!" />
+  <meta property="og:image" content="https://github.com/PIXORA24/digital_invites/blob/main/preview_image.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://pixora24.github.io/digital_invites/" />
+
+  <title>Prerna Singh & Sumit Gupta Marriage Ceremony</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #4a1d2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      max-width: 1080px;
+      aspect-ratio: 9 / 16;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1.2s ease-in-out forwards;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    #timer {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #FFD700;
+      background: #2c0d1a;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 18px;
+      z-index: 10;
+      box-shadow: 0 0 12px #FFD700;
+    }
+
+    .map-wrapper {
+      position: absolute;
+      top: 79.5%;
+      left: 62%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .map-link {
+      font-size: 17px;
+      color: #FFD700;
+      text-decoration: none;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease, color 0.3s ease;
+      box-shadow: 0 0 12px #FFD700;
+    }
+
+    .map-link:hover {
+      color: white;
+      background-color: rgba(255, 215, 0, 0.2);
+      transform: scale(1.2);
+    }
+
+    .music-play-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(44, 13, 26, 0.8);
+      color: #FFD700;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      z-index: 10;
+    }
+
+    .music-play-btn:hover {
+      color: white;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>You're Invited</h1>
-    <h2 id="names"></h2>
-    <p id="customMessage"></p>
-    <p><strong>Date:</strong> <span id="date"></span></p>
-    <p><strong>Venue:</strong> <span id="venue"></span></p>
+    <video id="engagementVideo" autoplay muted loop playsinline>
+      <source src="https://github.com/PIXORA24/digital_invites/blob/main/invite-video.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <div id="timer" class="fade-in" onclick="handleCalendarClick()" title="Click to add to calendar"></div>
+
+    <div class="map-wrapper fade-in">
+      <a class="map-link" href="https://maps.app.goo.gl/WwxHTitoHTTno8Hy8" target="_blank">
+        <i class="fas fa-map-marker-alt"></i>
+      </a>
+    </div>
+
+    <button class="music-play-btn fade-in" id="playMusicBtn">
+      <i class="fas fa-music"></i>
+    </button>
+
+    <audio id="bgMusic" loop>
+      <source src="https://github.com/PIXORA24/digital_invites/blob/main/music.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
   </div>
 
-  <video autoplay muted loop id="bgVideo">
-    <source src="assets/invite-video.mp4" type="video/mp4">
-    Your browser does not support HTML5 video.
-  </video>
-
-  <audio id="bgMusic" loop>
-    <source src="assets/music.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
-  </audio>
-
-  <script src="event-details.js"></script>
   <script>
-    document.getElementById("names").textContent = EVENT_DETAILS.brideName + " & " + EVENT_DETAILS.groomName;
-    document.getElementById("date").textContent = EVENT_DETAILS.eventDate;
-    document.getElementById("venue").textContent = EVENT_DETAILS.venue;
-    document.getElementById("customMessage").textContent = EVENT_DETAILS.customMessage;
+    const playMusicBtn = document.getElementById('playMusicBtn');
+    const bgMusic = document.getElementById('bgMusic');
 
-    const audio = document.getElementById("bgMusic");
-    document.body.addEventListener("click", () => {
-      if (EVENT_DETAILS.musicEnabled) {
-        audio.play();
+    function playMusicOnce() {
+      if (bgMusic.paused) {
+        bgMusic.play();
+        playMusicBtn.style.display = "none";
+        document.body.removeEventListener('click', playMusicOnce);
       }
-    });
+    }
+
+    document.body.addEventListener('click', playMusicOnce);
+
+    function updateTimer() {
+      const countDownDate = new Date("July 28, 2025 08:00:00").getTime();
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+
+      if (distance < 0) {
+        document.getElementById("timer").innerHTML = "Event Started!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+
+    function handleCalendarClick() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isAndroid = /Android/.test(navigator.userAgent);
+
+      if (isIOS) {
+        window.location.href = "https://github.com/PIXORA24/digital_invites/blob/main/prerna_sumit_marriage.ics";
+      } else {
+        const googleCalendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Prerna+Singh+%26+Sumit+Gupta+Marriage+Ceremony&dates=20250728T110000%2F20250728T140000&details=We+invite+you+to+bless+the+couple+and+celebrate+their+union.+More+details+at+https%3A%2F%2Fpixora24.github.io%2Fdigital_invites%2F&location=Bantara+Bhavana+Thumbe&trp=true&ctz=Asia%2FKolkata";
+        window.open(googleCalendarUrl, "_blank");
+      }
+    }
   </script>
 </body>
 </html>
